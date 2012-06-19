@@ -8,10 +8,9 @@ module SimpleTag
         include InstanceMethods
         
         def self.tagged_with(names)
+          return all if names.blank?
           names = format_tag_names(names)  
-          if names.blank?
-            return []
-          end
+          return [] if names.blank?
           query_tag_ids = Tag.where(:name => names).map {|t| t.id }
           query_tag_count = query_tag_ids.length
           taggable_ids = joins(:tags).where(:tags => {:id => query_tag_ids}).select("#{table_name}.id").map(&:id)
